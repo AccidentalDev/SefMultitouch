@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/black"
+    android:id="@+id/main_layout">
+
+    <ImageView android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/icon"
+        android:scaleType="matrix" />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical|center_horizontal"
+        android:background="@android:drawable/alert_dark_frame"
+        android:padding="30dp"
+        android:id="@+id/options_layout">
+
+        <Button
+            android:text="Open local file"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/local_button"
+            android:layout_weight="1"
+            android:layout_margin="10dp"
+            style="@android:style/Widget.Button.Inset"
+            android:padding="20dp" />
+
+        <Button
+            android:text="Use bluetooth"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/blue_button"
+            android:layout_weight="1"
+            android:layout_margin="10dp"
+            style="@android:style/Widget.Button.Inset"
+            android:padding="20dp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical" android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical|center_horizontal"
+        android:background="@android:drawable/alert_dark_frame"
+        android:padding="30dp"
+        android:id="@+id/bluetooth_options">
+
+        <Button
+            android:text="Search devices"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/discover_button"
+            style="@android:style/Widget.Button.Inset"
+            android:padding="20dp" />
+
+        <Button
+            android:text="Pair with a device"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/pair_button"
+            style="@android:style/Widget.Button.Inset"
+            android:padding="20dp" />
+
+        <Button
+            android:text="Get Image"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/recive_button"
+            style="@android:style/Widget.Button.Inset"
+            android:padding="20dp" />
+
+        <Button
+            android:text="Send image"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/send_button"
+            style="@android:style/Widget.Button.Inset"
+            android:padding="20dp" />
+
+    </LinearLayout>
+
+    <TextView
+        android:text="TextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView"
+        android:layout_gravity="bottom|left"
+        android:textColor="@android:color/black"
+        android:background="@android:color/transparent" />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="300dp"
+        android:layout_height="350dp"
+        android:layout_gravity="center_vertical|center_horizontal"
+        android:background="@android:drawable/alert_light_frame"
+        android:id="@+id/blue_devices_window">
+
+        <TextView
+            android:text="Discovered Devices"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:padding="10dp"
+            android:textAppearance="@android:style/TextAppearance"
+            android:textStyle="normal|bold"
+            android:id="@+id/blue_devices_title" />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="15dp"
+            android:id="@+id/blue_devices_scroll">
+
+            <TextView
+                android:text="TextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/blue_devices"
+                android:textAppearance="@android:style/TextAppearance" />
+        </ScrollView>
+
+    </LinearLayout>
+
+    <TextView
+        android:text="Sending image, please wait..."
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/blue_notification"
+        android:layout_gravity="center_vertical|center_horizontal"
+        android:textAppearance="@android:style/TextAppearance"
+        android:textAlignment="center"
+        android:background="@android:drawable/alert_dark_frame"
+        android:textColor="@android:color/background_light"
+        android:padding="20dp" />
+</FrameLayout>
