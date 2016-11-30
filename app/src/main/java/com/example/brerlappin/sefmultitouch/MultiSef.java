@@ -32,7 +32,7 @@ public class MultiSef extends Activity implements View.OnTouchListener{
     final static int DRAG = 1;
     final static int ZOOM = 2;
     ImageView imgView;
-    FrameLayout mainLayout;
+    FrameLayout mainLayout, fragmentContainer;
     LinearLayout optionsLayout, blueToothLayout, blueDevicesLayout;
     Button localButton, blueButton;
     Button blueDiscButton, bluePairButton, blueReciveButton, blueSendButton;
@@ -67,12 +67,13 @@ public class MultiSef extends Activity implements View.OnTouchListener{
         imgView.setOnTouchListener(this);
 
         mainLayout = (FrameLayout) findViewById(R.id.main_layout);
+        fragmentContainer = (FrameLayout) findViewById(R.id.fragment_container);
 
         initOptionsMenu();
         disableOptionsMenu();
 
-        initBlueOptionsMenu();
-        disableBluetoothOptions();
+//        initBlueOptionsMenu();
+//        disableBluetoothOptions();
 
         initDevicesList();
         disableDevicesList();
@@ -462,16 +463,8 @@ public class MultiSef extends Activity implements View.OnTouchListener{
         blueToothLayout.setAlpha(0);
     }
     public void enableBluetoothOptions(){
-//        mainLayout.bringChildToFront(blueToothLayout);
-//        //enableButton(blueAbleButton);
-//        enableButton(blueDiscButton);
-//        enableButton(bluePairButton);
-//        enableButton(blueReciveButton);
-//        enableButton(blueSendButton);
-//        blueToothLayout.setEnabled(true);
-//        blueToothLayout.setAlpha(1);
+        mainLayout.bringChildToFront(fragmentContainer);
 
-        //PENDING
         BlueFragment blueFragment = new BlueFragment();
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
 
