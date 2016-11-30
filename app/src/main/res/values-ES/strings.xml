@@ -1,8 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Sefo Imagenes</string>
+
     <string name="blue_search">Buscar celulares</string>
     <string name="blue_pair">Enlazar celulares</string>
     <string name="blue_get">Obtener imagen</string>
     <string name="blue_send">Enviar imagen</string>
+
+    <string name="menu_open">Abrir imagen local</string>
+    <string name="menu_useblue">Usar Bluetooth</string>
+
+    <string name="devices_title">Celulares Encontrados</string>
+    <string name="status_searching">Buscando...</string>
+    <string name="status_finished">Busqueda finalizada</string>
+    <string name="status_empty">No se encontro ningún celular</string>
+
+    <string name="transfer_status_send">Enviando imagen, por favor espera...</string>
+    <string name="transfer_status_receiving">Reciviendo imagen, por favor espera...</string>
 </resources>

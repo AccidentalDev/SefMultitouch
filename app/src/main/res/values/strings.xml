@@ -1,7 +1,19 @@
 <resources>
     <string name="app_name">Sef Multitouch</string>
+
     <string name="blue_search">Search devices</string>
     <string name="blue_pair">Pair with a device</string>
     <string name="blue_get">Get image</string>
     <string name="blue_send">Send image</string>
+
+    <string name="menu_open">Open local image</string>
+    <string name="menu_useblue">Use Bluetooth</string>
+
+    <string name="devices_title">Discovered Devices</string>
+    <string name="status_searching">Searching...</string>
+    <string name="status_finished">Search finished</string>
+    <string name="status_empty">No devices found</string>
+
+    <string name="transfer_status_send">Sending image, please wait...</string>
+    <string name="transfer_status_receiving">Receiving image, please wait...</string>
 </resources>

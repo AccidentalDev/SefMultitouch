@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="300dp"
+    android:layout_height="350dp"
+    android:layout_gravity="center_vertical|center_horizontal"
+    android:background="@android:drawable/alert_light_frame"
+    android:id="@+id/blue_devices_window">
+
+    <TextView
+        android:text="@string/devices_title"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:padding="10dp"
+        android:textAppearance="@android:style/TextAppearance"
+        android:textStyle="normal|bold"
+        android:id="@+id/blue_devices_title" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="15dp"
+        android:id="@+id/blue_devices_scroll"
+        android:layout_weight="1"
+        android:scrollbarStyle="insideOverlay">
+
+        <TextView
+            android:text="TextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/blue_devices"
+            android:textAppearance="@android:style/TextAppearance" />
+    </ScrollView>
+
+    <TextView
+        android:text="@string/status_searching"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/statusView"
+        android:textAppearance="@android:style/TextAppearance"
+        android:padding="5dp" />
+</LinearLayout>

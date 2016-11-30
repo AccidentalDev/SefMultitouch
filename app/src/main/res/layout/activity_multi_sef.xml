@@ -11,14 +11,7 @@
         android:src="@drawable/icon"
         android:scaleType="matrix" />
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/fragment_container">
-
-    </FrameLayout>
-
-    <LinearLayout
+    <!--<LinearLayout
         android:orientation="vertical"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -46,8 +39,7 @@
             android:layout_margin="10dp"
             style="@android:style/Widget.Button.Inset"
             android:padding="20dp" />
-
-    </LinearLayout>
+    </LinearLayout>-->
 
     <!--<LinearLayout
         android:orientation="vertical" android:layout_width="wrap_content"
@@ -91,8 +83,14 @@
 
     </LinearLayout>-->
 
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/fragment_container">
+
+    </FrameLayout>
+
     <TextView
-        android:text="TextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/textView"
@@ -100,7 +98,7 @@
         android:textColor="@android:color/black"
         android:background="@android:color/transparent" />
 
-    <LinearLayout
+    <!--<LinearLayout
         android:orientation="vertical"
         android:layout_width="300dp"
         android:layout_height="350dp"
@@ -130,11 +128,10 @@
                 android:id="@+id/blue_devices"
                 android:textAppearance="@android:style/TextAppearance" />
         </ScrollView>
-
-    </LinearLayout>
+    </LinearLayout>-->
 
     <TextView
-        android:text="Sending image, please wait..."
+        android:text="@string/transfer_status_send"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/blue_notification"
