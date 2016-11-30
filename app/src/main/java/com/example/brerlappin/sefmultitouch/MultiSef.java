@@ -1,6 +1,8 @@
 package com.example.brerlappin.sefmultitouch;
 
 import android.app.Activity;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
@@ -409,12 +411,11 @@ public class MultiSef extends Activity implements View.OnTouchListener{
             @Override
             public void onClick(View view) {
                 if(usesBluetooth){
-//                    usesBluetooth = soBlue.initBluetooth();
-//                    if(usesBluetooth)
-//                        bluetoothCheckEnabled();
-//                    else
-//                        Toast.makeText(MultiSef.this, "Failed to start Bluetooth service", Toast.LENGTH_LONG).show();
-
+                    usesBluetooth = soBlue.initBluetooth();
+                    if(usesBluetooth)
+                        bluetoothCheckEnabled();
+                    else
+                        Toast.makeText(MultiSef.this, "Failed to start Bluetooth service", Toast.LENGTH_LONG).show();
                 }else{
                     Toast.makeText(MultiSef.this, "This version does not support Bluetooth", Toast.LENGTH_LONG).show();
                 }
@@ -461,14 +462,23 @@ public class MultiSef extends Activity implements View.OnTouchListener{
         blueToothLayout.setAlpha(0);
     }
     public void enableBluetoothOptions(){
-        mainLayout.bringChildToFront(blueToothLayout);
-        //enableButton(blueAbleButton);
-        enableButton(blueDiscButton);
-        enableButton(bluePairButton);
-        enableButton(blueReciveButton);
-        enableButton(blueSendButton);
-        blueToothLayout.setEnabled(true);
-        blueToothLayout.setAlpha(1);
+//        mainLayout.bringChildToFront(blueToothLayout);
+//        //enableButton(blueAbleButton);
+//        enableButton(blueDiscButton);
+//        enableButton(bluePairButton);
+//        enableButton(blueReciveButton);
+//        enableButton(blueSendButton);
+//        blueToothLayout.setEnabled(true);
+//        blueToothLayout.setAlpha(1);
+
+        //PENDING
+        BlueFragment blueFragment = new BlueFragment();
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+
+        transaction.replace(R.id.fragment_container, blueFragment);
+        transaction.addToBackStack(null);
+
+        transaction.commit();
     }
     public void disableOptionsMenu(){
         mainLayout.bringChildToFront(imgView);
