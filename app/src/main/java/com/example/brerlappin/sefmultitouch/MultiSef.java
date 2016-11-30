@@ -409,12 +409,16 @@ public class MultiSef extends Activity implements View.OnTouchListener{
             @Override
             public void onClick(View view) {
                 if(usesBluetooth){
-                    usesBluetooth = soBlue.initBluetooth();
-                    if(usesBluetooth)
-                        bluetoothCheckEnabled();
-                    else
-                        Toast.makeText(MultiSef.this, "Failed to start Bluetooth service", Toast.LENGTH_LONG).show();
+//                    usesBluetooth = soBlue.initBluetooth();
+//                    if(usesBluetooth)
+//                        bluetoothCheckEnabled();
+//                    else
+//                        Toast.makeText(MultiSef.this, "Failed to start Bluetooth service", Toast.LENGTH_LONG).show();
+
+                }else{
+                    Toast.makeText(MultiSef.this, "This version does not support Bluetooth", Toast.LENGTH_LONG).show();
                 }
+
             }
         });
     }

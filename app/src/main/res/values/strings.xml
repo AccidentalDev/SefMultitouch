@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Sef Multitouch</string>
+    <string name="blue_search">Search devices</string>
+    <string name="blue_pair">Pair with a device</string>
+    <string name="blue_get">Get image</string>
+    <string name="blue_send">Send image</string>
 </resources>

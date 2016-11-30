@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Sefo Imagenes</string>
+    <string name="blue_search">Buscar celulares</string>
+    <string name="blue_pair">Enlazar celulares</string>
+    <string name="blue_get">Obtener imagen</string>
+    <string name="blue_send">Enviar imagen</string>
+</resources>

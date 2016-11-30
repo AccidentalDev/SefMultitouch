@@ -4,18 +4,11 @@
     android:layout_height="wrap_content"
     android:layout_gravity="center_vertical|center_horizontal"
     android:background="@android:drawable/alert_dark_frame"
-    android:padding="30dp">
+    android:padding="30dp"
+    android:id="@+id/bluetooth_options">
 
     <Button
-        android:text="Set discoverable"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/button_discoverable"
-        style="@android:style/Widget.Button.Inset"
-        android:padding="20dp" />
-
-    <Button
-        android:text="Search devices"
+        android:text="@string/blue_search"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/discover_button"
@@ -23,7 +16,7 @@
         android:padding="20dp" />
 
     <Button
-        android:text="Pair with a device"
+        android:text="@string/blue_pair"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/pair_button"
@@ -31,11 +24,18 @@
         android:padding="20dp" />
 
     <Button
-        android:text="Send image"
+        android:text="@string/blue_get"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/recive_button"
+        style="@android:style/Widget.Button.Inset"
+        android:padding="20dp" />
+
+    <Button
+        android:text="@string/blue_send"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/send_button"
         style="@android:style/Widget.Button.Inset"
         android:padding="20dp" />
-
 </LinearLayout>
