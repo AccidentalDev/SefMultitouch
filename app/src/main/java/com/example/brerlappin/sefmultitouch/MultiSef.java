@@ -76,6 +76,9 @@ public class MultiSef extends Activity implements View.OnTouchListener,
         mainLayout = (FrameLayout) findViewById(R.id.main_layout);
         fragmentContainer = (FrameLayout) findViewById(R.id.fragment_container);
 
+        blueNotificationText = (TextView) findViewById(R.id.blue_notification);
+        disableBlueNotification();
+
         //soBlue = new MyBluetooth(this, blueDevicesTextList, imgView);
         soBlue = new MyBluetooth(this, imgView);
 
