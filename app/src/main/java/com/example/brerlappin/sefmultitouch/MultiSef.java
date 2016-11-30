@@ -1,6 +1,7 @@
 package com.example.brerlappin.sefmultitouch;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.ContentResolver;
@@ -27,17 +28,25 @@ import android.widget.Toast;
 import java.io.FileNotFoundException;
 import java.util.UUID;
 
-public class MultiSef extends Activity implements View.OnTouchListener{
+public class MultiSef extends Activity implements View.OnTouchListener,
+        MenuFragment.OnMenuOptionListener, BlueFragment.OnBlueOptionListener{
     final static int NONE = 0;
     final static int DRAG = 1;
     final static int ZOOM = 2;
     ImageView imgView;
     FrameLayout mainLayout, fragmentContainer;
-    LinearLayout optionsLayout, blueToothLayout, blueDevicesLayout;
-    Button localButton, blueButton;
-    Button blueDiscButton, bluePairButton, blueReciveButton, blueSendButton;
-    TextView blueDevicesTitle, blueDevicesTextList, blueNotificationText;
-    ScrollView blueDevicesScroll;
+//    LinearLayout optionsLayout, blueToothLayout, blueDevicesLayout;
+//    Button localButton, blueButton;
+//    Button blueDiscButton, bluePairButton, blueReciveButton, blueSendButton;
+//    TextView blueDevicesTitle, blueDevicesTextList;
+//    ScrollView blueDevicesScroll;
+
+    FragmentTransaction fragmentTransaction;
+    MenuFragment menuFragment;
+    BlueFragment blueFragment;
+    DevicesFragment devicesFragment;
+
+    TextView blueNotificationText;
     long optionsTimer;
 
     int touchState = NONE;
@@ -56,8 +65,6 @@ public class MultiSef extends Activity implements View.OnTouchListener{
     private int typeDebug = 0; //0=Hide, 1=Pressure, 2=Movement matrix
 
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,16 +76,8 @@ public class MultiSef extends Activity implements View.OnTouchListener{
         mainLayout = (FrameLayout) findViewById(R.id.main_layout);
         fragmentContainer = (FrameLayout) findViewById(R.id.fragment_container);
 
-        initOptionsMenu();
-        disableOptionsMenu();
-
-//        initBlueOptionsMenu();
-//        disableBluetoothOptions();
-
-        initDevicesList();
-        disableDevicesList();
-
-        soBlue = new MyBluetooth(this, blueDevicesTextList, imgView);
+        //soBlue = new MyBluetooth(this, blueDevicesTextList, imgView);
+        soBlue = new MyBluetooth(this, imgView);
 
         imgView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE
                 | View.SYSTEM_UI_FLAG_FULLSCREEN
@@ -95,11 +94,7 @@ public class MultiSef extends Activity implements View.OnTouchListener{
         if(!soBlue.checkEnabled()){
             usesBluetooth = false;
         }else {
-//            soBlue.discovery();
-//            soBlue.setDiscoverable();
-            disableOptionsMenu();
             enableBluetoothOptions();
-            //waitingResult = false;
         }
     }
 
@@ -109,7 +104,7 @@ public class MultiSef extends Activity implements View.OnTouchListener{
 
         if(requestCode == 0){
             waitingResult = false;
-            disableOptionsMenu();
+            disableFragment(menuFragment);
             if (resultCode == RESULT_OK) {
                 //Local File Request
                 matrix.reset();
@@ -135,14 +130,6 @@ public class MultiSef extends Activity implements View.OnTouchListener{
                 Log.v("Image loader", "New image size: "+imageToChange.getAllocationByteCount()+" bytes");
                 imgView.setImageBitmap(imageToChange);
             }
-
-//            imgView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE
-//                    | View.SYSTEM_UI_FLAG_FULLSCREEN
-//                    | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-//                    | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-//                    | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-//                    | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
-
         }else if(requestCode == 101){
             if (resultCode == RESULT_CANCELED) {
                 //Bluetooth request failed
@@ -151,17 +138,8 @@ public class MultiSef extends Activity implements View.OnTouchListener{
             } else if(resultCode == RESULT_OK){
                 Log.d("Bluetooth info", "************************* Bluetooth enabled successfully");
                 usesBluetooth = true;
-//                soBlue.discovery();
-//                soBlue.setDiscoverable();
                 enableBluetoothOptions();
             }
-
-//            imgView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE
-//                    | View.SYSTEM_UI_FLAG_FULLSCREEN
-//                    | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-//                    | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-//                    | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-//                    | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
         }else if(requestCode == 102){
             if (resultCode == RESULT_CANCELED) {
                 Log.d("Bluetooth info", "************************* Failed to set discoverable");
@@ -219,9 +197,7 @@ public class MultiSef extends Activity implements View.OnTouchListener{
                 enableOptionsMenu();
                 waitingResult = true;
             } else {
-                disableOptionsMenu();
-                disableBluetoothOptions();
-                disableDevicesList();
+                disableFragment(menuFragment);
                 waitingResult = false;
             }
             optionsTimer = System.currentTimeMillis();
@@ -343,161 +319,117 @@ public class MultiSef extends Activity implements View.OnTouchListener{
         blueNotificationText.setAlpha(0);
     }
 
-    private void initBlueOptionsMenu(){
-        blueToothLayout = (LinearLayout) findViewById(R.id.bluetooth_options);
-        //blueAbleButton = (Button) findViewById(R.id.button_discoverable);
-        blueDiscButton = (Button) findViewById(R.id.discover_button);
-        bluePairButton = (Button) findViewById(R.id.pair_button);
-        blueReciveButton = (Button) findViewById(R.id.recive_button);
-        blueSendButton = (Button) findViewById(R.id.send_button);
-        blueNotificationText = (TextView) findViewById(R.id.blue_notification);
-        blueNotificationText.setAlpha(0);
+//    private void initDevicesList(){
+//        blueDevicesLayout = (LinearLayout) findViewById(R.id.blue_devices_window);
+//        blueDevicesTitle = (TextView) findViewById(R.id.blue_devices_title);
+//        blueDevicesScroll = (ScrollView) findViewById(R.id.blue_devices_scroll);
+//        blueDevicesTextList = (TextView) findViewById(R.id.blue_devices);
+//        blueDevicesTextList.setText(" ");//setDevicesListText(" ", false);
+//    }
 
-//        blueAbleButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                soBlue.setDiscoverable();
-//            }
-//        });
-        blueDiscButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+    @Override
+    public void onBlueButtonPressed(int buttonID){
+        switch(buttonID){
+            case 1:
                 enableDevicesList();
                 soBlue.discovery();
                 discoveryStarted = true;
-            }
-        });
-        bluePairButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+                break;
+            case 2:
                 //enablePairedList();
                 soBlue.prePairDevices();
-            }
-        });
-        blueReciveButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                blueNotificationText.setText("Receiving image, please wait...");
+                break;
+            case 3:
+                blueNotificationText.setText(getString(R.string.transfer_status_receiving));
                 mainLayout.bringChildToFront(blueNotificationText);
                 blueNotificationText.setAlpha(1);
                 soBlue.serverConnection();
-            }
-        });
-        blueSendButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                blueNotificationText.setText("Sending image, please wait...");
+                break;
+            case 4:
+                blueNotificationText.setText(getString(R.string.transfer_status_send));
                 mainLayout.bringChildToFront(blueNotificationText);
                 blueNotificationText.setAlpha(1);
                 soBlue.clientConnection();
-            }
-        });
+                break;
+            default:
+                Log.e("BlueFragmentListener", "ERROR: Button ID not recognized");
+        }
     }
-    private void initOptionsMenu(){
-        optionsLayout = (LinearLayout) findViewById(R.id.options_layout);
-        localButton = (Button) findViewById(R.id.local_button);
-        blueButton = (Button) findViewById(R.id.blue_button);
 
-        localButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (!useSystemFilePicker) {
-                    openImage();
-                } else {
-                    openImageSystem();
-                }
+    @Override
+    public void onMenuButtonPressed(int buttonID){
+        if(buttonID == 1){
+            if (!useSystemFilePicker) {
+                openImage();
+            } else {
+                openImageSystem();
             }
-        });
-        blueButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(usesBluetooth){
-                    usesBluetooth = soBlue.initBluetooth();
-                    if(usesBluetooth)
-                        bluetoothCheckEnabled();
-                    else
-                        Toast.makeText(MultiSef.this, "Failed to start Bluetooth service", Toast.LENGTH_LONG).show();
-                }else{
-                    Toast.makeText(MultiSef.this, "This version does not support Bluetooth", Toast.LENGTH_LONG).show();
-                }
+        } else if(buttonID == 2) {
+            if(usesBluetooth){
+                usesBluetooth = soBlue.initBluetooth();
+                if(usesBluetooth)
+                    bluetoothCheckEnabled();
+                else
+                    Toast.makeText(MultiSef.this, "Failed to start Bluetooth service", Toast.LENGTH_LONG).show();
+            }else{
+                Toast.makeText(MultiSef.this, "This version does not support Bluetooth", Toast.LENGTH_LONG).show();
+            }
+        }
+    }
 
-            }
-        });
-    }
-    private void initDevicesList(){
-        blueDevicesLayout = (LinearLayout) findViewById(R.id.blue_devices_window);
-        blueDevicesTitle = (TextView) findViewById(R.id.blue_devices_title);
-        blueDevicesScroll = (ScrollView) findViewById(R.id.blue_devices_scroll);
-        blueDevicesTextList = (TextView) findViewById(R.id.blue_devices);
-        blueDevicesTextList.setText(" ");//setDevicesListText(" ", false);
-    }
-//    public void setDevicesListText(String text, boolean addText){
-//        String tmpText;
-//        if(addText){
-//            tmpText = (String) blueDevicesTextList.getText();
-//            blueDevicesTextList.setText(tmpText +"\n"+ text);
-//        }else{
-//            blueDevicesTextList.setText(text);
-//        }
-//    }
-    public void disableDevicesList(){
-        mainLayout.bringChildToFront(imgView);
-        disableButton(blueDevicesScroll);
-        blueDevicesLayout.setEnabled(false);
-        blueDevicesLayout.setAlpha(0);
-    }
     public void enableDevicesList(){
-        mainLayout.bringChildToFront(blueDevicesLayout);
-        enableButton(blueDevicesScroll);
-        blueDevicesLayout.setEnabled(true);
-        blueDevicesLayout.setAlpha(1);
-    }
-    public void disableBluetoothOptions(){
-        mainLayout.bringChildToFront(imgView);
-        //disableButton(blueAbleButton);
-        disableButton(blueDiscButton);
-        disableButton(bluePairButton);
-        disableButton(blueReciveButton);
-        disableButton(blueSendButton);
-        blueToothLayout.setEnabled(false);
-        blueToothLayout.setAlpha(0);
+        mainLayout.bringChildToFront(fragmentContainer);
+
+        if(devicesFragment == null) {
+            devicesFragment = new DevicesFragment();
+        }
+        if(fragmentTransaction == null){
+            fragmentTransaction = getFragmentManager().beginTransaction();
+        }
+
+        fragmentTransaction.replace(R.id.fragment_container, devicesFragment);
+        fragmentTransaction.addToBackStack(null);
+
+        fragmentTransaction.commit();
     }
     public void enableBluetoothOptions(){
         mainLayout.bringChildToFront(fragmentContainer);
 
-        BlueFragment blueFragment = new BlueFragment();
-        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        if(blueFragment == null) {
+            blueFragment = new BlueFragment();
+        }
+        if(fragmentTransaction == null){
+            fragmentTransaction = getFragmentManager().beginTransaction();
+        }
 
-        transaction.replace(R.id.fragment_container, blueFragment);
-        transaction.addToBackStack(null);
+        fragmentTransaction.replace(R.id.fragment_container, blueFragment);
+        fragmentTransaction.addToBackStack(null);
 
-        transaction.commit();
-    }
-    public void disableOptionsMenu(){
-        mainLayout.bringChildToFront(imgView);
-        disableButton(localButton);
-        disableButton(blueButton);
-        optionsLayout.setEnabled(false);
-        optionsLayout.setAlpha(0);
+        fragmentTransaction.commit();
     }
     public void enableOptionsMenu(){
-        mainLayout.bringChildToFront(optionsLayout);
-        enableButton(localButton);
-        enableButton(blueButton);
-        optionsLayout.setEnabled(true);
-        optionsLayout.setAlpha(1);
+        mainLayout.bringChildToFront(fragmentContainer);
+
+        if(menuFragment == null) {
+            menuFragment = new MenuFragment();
+        }
+        if(fragmentTransaction == null){
+            fragmentTransaction = getFragmentManager().beginTransaction();
+        }
+
+        fragmentTransaction.replace(R.id.fragment_container, menuFragment);
+        fragmentTransaction.addToBackStack(null);
+
+        fragmentTransaction.commit();
     }
-    public void disableButton(View tmpBtt){
-        tmpBtt.setEnabled(false);
-        tmpBtt.setActivated(false);
-        tmpBtt.setClickable(false);
-        tmpBtt.setFocusable(false);
-    }
-    public void enableButton(View tmpBtt){
-        tmpBtt.setEnabled(true);
-        tmpBtt.setActivated(true);
-        tmpBtt.setClickable(true);
-        tmpBtt.setFocusable(true);
+
+    public void disableFragment(Fragment fragment){
+        if(fragmentTransaction == null){
+            fragmentTransaction = getFragmentManager().beginTransaction();
+        }
+        fragmentTransaction.detach(fragment);
+        fragmentTransaction.commit();
+        mainLayout.bringChildToFront(imgView);
     }
 
     @Override

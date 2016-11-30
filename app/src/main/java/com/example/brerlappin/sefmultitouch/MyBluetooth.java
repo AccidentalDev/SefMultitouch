@@ -41,9 +41,10 @@ public class MyBluetooth {
     private UUID myUUID;
     //String deviceName = "NiggaBluethootTest";
 
-    MyBluetooth(MultiSef actv, TextView textView, ImageView tmpimg){
+    //MyBluetooth(MultiSef actv, TextView textView, ImageView tmpimg){
+    MyBluetooth(MultiSef actv, ImageView tmpimg){
         mainActivity = actv;
-        devicesListView = textView;
+        //devicesListView = textView;
         mainImage = tmpimg;
         devicesList = new ArrayList<BluetoothDevice>();
         bondedList = new ArrayList<BluetoothDevice>(3);
@@ -161,24 +162,20 @@ public class MyBluetooth {
                 devicesList.add(device);
                 Log.v("Bluetooth Testing", "************************* "+device.getName()+"\n"+device.getAddress());
 
-                tmpTxt = (String) devicesListView.getText();
+                //tmpTxt = (String) devicesListView.getText();
                 tmpTxt = tmpTxt +"\n"+ device.getName();
-                //mainActivity.setDevicesListText(device.getName(), true);
 
             }else if(BluetoothAdapter.ACTION_DISCOVERY_STARTED.equals(action)){
                 tmpTxt = "Searching...";
-                //mainActivity.setDevicesListText("Searching...", false);
 
             }else if(BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)){
-                tmpTxt = (String) devicesListView.getText();
+                //tmpTxt = (String) devicesListView.getText();
                 tmpTxt = tmpTxt +"\n"+ "Search finished";
-                //mainActivity.setDevicesListText("Search finished", true);
                 if(devicesList.isEmpty()){
                     tmpTxt = tmpTxt +"\n"+ "No devices found";
-                    //mainActivity.setDevicesListText("No devices found", true);
                 }
             }
-            devicesListView.setText(tmpTxt);
+            //devicesListView.setText(tmpTxt);
         }
     };
 
