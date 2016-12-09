@@ -41,6 +41,7 @@ public class MultiSef extends Activity implements View.OnTouchListener,
 //    TextView blueDevicesTitle, blueDevicesTextList;
 //    ScrollView blueDevicesScroll;
 
+    FragmentManager fragmentManager;
     FragmentTransaction fragmentTransaction;
     MenuFragment menuFragment;
     BlueFragment blueFragment;
@@ -75,6 +76,17 @@ public class MultiSef extends Activity implements View.OnTouchListener,
 
         mainLayout = (FrameLayout) findViewById(R.id.main_layout);
         fragmentContainer = (FrameLayout) findViewById(R.id.fragment_container);
+
+        fragmentManager = getFragmentManager();
+        fragmentManager.addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
+            @Override
+            public void onBackStackChanged() {
+                Log.v("Fragment Manager", "Current Back Stack Count: "+fragmentManager.getBackStackEntryCount());
+                if(fragmentManager.getBackStackEntryCount() <= 0){
+                    waitingResult = false;
+                }
+            }
+        });
 
         blueNotificationText = (TextView) findViewById(R.id.blue_notification);
         disableBlueNotification();
@@ -201,7 +213,7 @@ public class MultiSef extends Activity implements View.OnTouchListener,
                 waitingResult = true;
             } else {
                 disableFragment(menuFragment);
-                waitingResult = false;
+                //waitingResult = false;
             }
             optionsTimer = System.currentTimeMillis();
             return false;
@@ -317,8 +329,13 @@ public class MultiSef extends Activity implements View.OnTouchListener,
         imgView.setImageBitmap(image);
         disableBlueNotification();
     }
+
+    public void enableBlueNotification(){
+        //mainLayout.bringChildToFront(blueNotificationText);
+        blueNotificationText.setAlpha(1);
+    }
     public void disableBlueNotification(){
-        mainLayout.bringChildToFront(imgView);
+        //mainLayout.bringChildToFront(imgView);
         blueNotificationText.setAlpha(0);
     }
 
@@ -343,15 +360,13 @@ public class MultiSef extends Activity implements View.OnTouchListener,
                 soBlue.prePairDevices();
                 break;
             case 3:
-                blueNotificationText.setText(getString(R.string.transfer_status_receiving));
-                mainLayout.bringChildToFront(blueNotificationText);
-                blueNotificationText.setAlpha(1);
+//                blueNotificationText.setText(getString(R.string.transfer_status_receiving));
+//                enableBlueNotification();
                 soBlue.serverConnection();
                 break;
             case 4:
-                blueNotificationText.setText(getString(R.string.transfer_status_send));
-                mainLayout.bringChildToFront(blueNotificationText);
-                blueNotificationText.setAlpha(1);
+//                blueNotificationText.setText(getString(R.string.transfer_status_send));
+//                enableBlueNotification();
                 soBlue.clientConnection();
                 break;
             default:
@@ -381,45 +396,42 @@ public class MultiSef extends Activity implements View.OnTouchListener,
     }
 
     public void enableDevicesList(){
-        mainLayout.bringChildToFront(fragmentContainer);
+        //mainLayout.bringChildToFront(fragmentContainer);
 
         if(devicesFragment == null) {
             devicesFragment = new DevicesFragment();
         }
-        if(fragmentTransaction == null){
-            fragmentTransaction = getFragmentManager().beginTransaction();
-        }
+        fragmentTransaction = fragmentManager.beginTransaction();
 
+        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         fragmentTransaction.replace(R.id.fragment_container, devicesFragment);
         fragmentTransaction.addToBackStack(null);
 
         fragmentTransaction.commit();
     }
     public void enableBluetoothOptions(){
-        mainLayout.bringChildToFront(fragmentContainer);
+        //mainLayout.bringChildToFront(fragmentContainer);
 
         if(blueFragment == null) {
             blueFragment = new BlueFragment();
         }
-        if(fragmentTransaction == null){
-            fragmentTransaction = getFragmentManager().beginTransaction();
-        }
+        fragmentTransaction = fragmentManager.beginTransaction();
 
+        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         fragmentTransaction.replace(R.id.fragment_container, blueFragment);
         fragmentTransaction.addToBackStack(null);
 
         fragmentTransaction.commit();
     }
     public void enableOptionsMenu(){
-        mainLayout.bringChildToFront(fragmentContainer);
+        //mainLayout.bringChildToFront(fragmentContainer);
 
         if(menuFragment == null) {
             menuFragment = new MenuFragment();
         }
-        if(fragmentTransaction == null){
-            fragmentTransaction = getFragmentManager().beginTransaction();
-        }
+        fragmentTransaction = fragmentManager.beginTransaction();
 
+        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         fragmentTransaction.replace(R.id.fragment_container, menuFragment);
         fragmentTransaction.addToBackStack(null);
 
@@ -427,18 +439,23 @@ public class MultiSef extends Activity implements View.OnTouchListener,
     }
 
     public void disableFragment(Fragment fragment){
-        if(fragmentTransaction == null){
-            fragmentTransaction = getFragmentManager().beginTransaction();
-        }
-        fragmentTransaction.detach(fragment);
-        fragmentTransaction.commit();
-        mainLayout.bringChildToFront(imgView);
+        fragmentManager.popBackStack();
     }
 
     @Override
     protected void onDestroy(){
         if(discoveryStarted)
             unregisterReceiver(soBlue.tootBrReceiver);
+
+        if(menuFragment != null) {
+            menuFragment = null;
+        }
+        if(blueFragment != null) {
+            blueFragment = null;
+        }
+        if(devicesFragment != null) {
+            devicesFragment = null;
+        }
 
         super.onDestroy();
     }

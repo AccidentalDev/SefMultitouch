@@ -200,8 +200,10 @@ public class MyBluetooth {
                     socket = serverSocket.accept();
 
                     if(socket != null){
-                        //Call method to recive image
+                        //Call method to receive image
                         DataTransmitterThread dataThread = new DataTransmitterThread(socket, mainImage);
+                        mainActivity.blueNotificationText.setText(mainActivity.getString(R.string.transfer_status_receiving));
+                        mainActivity.enableBlueNotification();
                         dataThread.start();
                         serverSocket.close();
                         break;
@@ -212,6 +214,7 @@ public class MyBluetooth {
                     break;
                 }
             }
+            mainActivity.disableBlueNotification();
         }
 
         public void cancel(){
@@ -246,17 +249,25 @@ public class MyBluetooth {
             try {
                 socket.connect();
                 DataTransmitterThread dataThread = new DataTransmitterThread(socket, mainImage);
+                mainActivity.blueNotificationText.setText(mainActivity.getString(R.string.transfer_status_send));
+                mainActivity.enableBlueNotification();
                 dataThread.write();
             } catch (IOException e) {
                 //e.printStackTrace();
                 Log.e("Bluetooth connection", e.getMessage());
-                Toast.makeText(mainActivity.getApplicationContext(), "Error while making connection", Toast.LENGTH_LONG).show();
+
+                mainActivity.runOnUiThread(new Runnable() {
+                    public void run() {
+                        Toast.makeText(mainActivity.getApplicationContext(), "Error while making connection", Toast.LENGTH_LONG).show();
+                    }
+                });
                 try {
                     socket.close();
                 } catch (IOException e1) {
                     e1.printStackTrace();
                 }
             }
+            mainActivity.disableBlueNotification();
         }
 
         public void cancel(){
