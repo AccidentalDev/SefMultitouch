@@ -16,4 +16,8 @@
 
     <string name="transfer_status_send">Sending image, please wait...</string>
     <string name="transfer_status_receiving">Receiving image, please wait...</string>
+    <string name="transfer_status_waiting">Waiting for remote device to send image...</string>
+
+    <string name="pair_title">Please select a device to pair to:</string>
+    <string name="pair_button_text">Continue</string>
 </resources>

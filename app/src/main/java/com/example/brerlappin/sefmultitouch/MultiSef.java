@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.bluetooth.BluetoothDevice;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
@@ -14,6 +15,8 @@ import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
 import android.util.FloatMath;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -26,10 +29,12 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.UUID;
 
 public class MultiSef extends Activity implements View.OnTouchListener,
-        MenuFragment.OnMenuOptionListener, BlueFragment.OnBlueOptionListener{
+        MenuFragment.OnMenuOptionListener, BlueFragment.OnBlueOptionListener,
+        MyBluetooth.OnDiscoveryListener{
     final static int NONE = 0;
     final static int DRAG = 1;
     final static int ZOOM = 2;
@@ -46,6 +51,7 @@ public class MultiSef extends Activity implements View.OnTouchListener,
     MenuFragment menuFragment;
     BlueFragment blueFragment;
     DevicesFragment devicesFragment;
+    SelectionFragment selectionFragment;
 
     TextView blueNotificationText;
     long optionsTimer;
@@ -222,6 +228,7 @@ public class MultiSef extends Activity implements View.OnTouchListener,
         if(waitingResult)
             return true;
 
+        Log.v("Touch Event", "Action: "+event.getAction());
         switch(event.getAction() & MotionEvent.ACTION_MASK){
             case MotionEvent.ACTION_DOWN:
                 touchState = DRAG;
@@ -346,7 +353,41 @@ public class MultiSef extends Activity implements View.OnTouchListener,
 //        blueDevicesTextList = (TextView) findViewById(R.id.blue_devices);
 //        blueDevicesTextList.setText(" ");//setDevicesListText(" ", false);
 //    }
+    public Handler blueStatusHandler = new Handler(){
+        public void handleMessage(Message message){
+            Bundle data = message.peekData();
+            char textID = data.getChar("textID");
+            String statusText;
+            switch (textID){
+                case 'w':
+                    statusText = getString(R.string.transfer_status_waiting);
+                    break;
+                case 'r':
+                    statusText = getString(R.string.transfer_status_receiving);
+                    break;
+                case 's':
+                    statusText = getString(R.string.transfer_status_send);
+                    break;
+                default:
+                    Log.e("Bluetooth", "Bluetooth status text ID not recognized!!!");
+                    statusText = "UNEXPECTED ERROR";
+            }
 
+            blueNotificationText.setText(statusText);
+            enableBlueNotification();
+        }
+    };
+    @Override
+    public void onDiscoveryStatusChanged(String text, boolean statusText){
+        if(devicesFragment == null){
+            return;
+        }
+        if(statusText){
+            devicesFragment.setStatusText(text);
+        }else{
+            devicesFragment.addDeviceToList(text);
+        }
+    }
     @Override
     public void onBlueButtonPressed(int buttonID){
         switch(buttonID){
@@ -395,6 +436,23 @@ public class MultiSef extends Activity implements View.OnTouchListener,
         }
     }
 
+    public void enableDevicesSelection(ArrayList<BluetoothDevice> list){
+
+        if(selectionFragment == null) {
+            selectionFragment = new SelectionFragment();
+        }
+        for(BluetoothDevice device: list){
+            selectionFragment.addDevice(device.getName());
+        }
+
+        fragmentTransaction = fragmentManager.beginTransaction();
+
+        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+        fragmentTransaction.replace(R.id.fragment_container, selectionFragment);
+        fragmentTransaction.addToBackStack(null);
+
+        fragmentTransaction.commit();
+    }
     public void enableDevicesList(){
         //mainLayout.bringChildToFront(fragmentContainer);
 

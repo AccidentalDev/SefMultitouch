@@ -131,7 +131,7 @@
     </LinearLayout>-->
 
     <TextView
-        android:text="@string/transfer_status_send"
+        android:text="..."
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/blue_notification"
@@ -141,4 +141,5 @@
         android:background="@android:drawable/alert_dark_frame"
         android:textColor="@android:color/background_light"
         android:padding="20dp" />
+
 </FrameLayout>

@@ -17,4 +17,8 @@
 
     <string name="transfer_status_send">Enviando imagen, por favor espera...</string>
     <string name="transfer_status_receiving">Reciviendo imagen, por favor espera...</string>
+    <string name="transfer_status_waiting">Esperando a que el celular remoto envie la imagen...</string>
+
+    <string name="pair_title">Selecciona el celular a vincular:</string>
+    <string name="pair_button_text">Continuar</string>
 </resources>
