@@ -50,6 +50,7 @@ public class BlueFragment extends Fragment {
         Button bluePairButton = (Button) getActivity().findViewById(R.id.pair_button);
         Button blueReciveButton = (Button) getActivity().findViewById(R.id.recive_button);
         Button blueSendButton = (Button) getActivity().findViewById(R.id.send_button);
+        Button blueCloseButton = (Button) getActivity().findViewById(R.id.close_button_blue);
         //blueNotificationText = (TextView) findViewById(R.id.blue_notification);
         //blueNotificationText.setAlpha(0);
 
@@ -75,6 +76,12 @@ public class BlueFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 activityCallback.onBlueButtonPressed(4);
+            }
+        });
+        blueCloseButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                activityCallback.onBlueButtonPressed(5);
             }
         });
     }

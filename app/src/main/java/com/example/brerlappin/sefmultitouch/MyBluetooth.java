@@ -155,6 +155,10 @@ public class MyBluetooth {
 
         blueTooth.startDiscovery();
     }
+    public void stopBlueDiscovery(){
+        blueTooth.cancelDiscovery();
+        Log.v("Bluetooth", "Bluetooth device discovery canceled!!");
+    }
 
     public final BroadcastReceiver tootBrReceiver = new BroadcastReceiver() {
         @Override
@@ -268,7 +272,7 @@ public class MyBluetooth {
         }
 
         public void run(){
-            blueTooth.cancelDiscovery();//Por si las dudas
+            stopBlueDiscovery();//Por si las dudas
 
             try {
                 socket.connect();

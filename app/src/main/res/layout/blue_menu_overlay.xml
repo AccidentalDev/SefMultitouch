@@ -1,41 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="wrap_content"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_gravity="center_vertical|center_horizontal"
-    android:background="@android:drawable/alert_dark_frame"
-    android:padding="30dp"
-    android:id="@+id/bluetooth_options">
+    android:id="@+id/bluetooth_options_main">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical|center_horizontal"
+        android:background="@android:drawable/alert_dark_frame"
+        android:padding="30dp"
+        android:id="@+id/bluetooth_options">
+
+        <Button
+            android:text="@string/blue_search"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/discover_button"
+            style="@android:style/Widget.Button.Inset"
+            android:padding="20dp" />
+
+        <Button
+            android:text="@string/blue_pair"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/pair_button"
+            style="@android:style/Widget.Button.Inset"
+            android:padding="20dp" />
+
+        <Button
+            android:text="@string/blue_get"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/recive_button"
+            style="@android:style/Widget.Button.Inset"
+            android:padding="20dp" />
+
+        <Button
+            android:text="@string/blue_send"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/send_button"
+            style="@android:style/Widget.Button.Inset"
+            android:padding="20dp" />
+    </LinearLayout>
 
     <Button
-        android:text="@string/blue_search"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/discover_button"
-        style="@android:style/Widget.Button.Inset"
-        android:padding="20dp" />
-
-    <Button
-        android:text="@string/blue_pair"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/pair_button"
-        style="@android:style/Widget.Button.Inset"
-        android:padding="20dp" />
-
-    <Button
-        android:text="@string/blue_get"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/recive_button"
-        style="@android:style/Widget.Button.Inset"
-        android:padding="20dp" />
-
-    <Button
-        android:text="@string/blue_send"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/send_button"
-        style="@android:style/Widget.Button.Inset"
-        android:padding="20dp" />
-</LinearLayout>
+        android:text=" "
+        android:id="@+id/close_button_blue"
+        style="@android:style/Widget.Button"
+        android:textStyle="normal|bold"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentTop="false"
+        android:layout_alignParentStart="false"
+        android:layout_alignParentRight="false"
+        android:layout_alignRight="@+id/bluetooth_options"
+        android:background="@android:drawable/presence_offline" />
+</RelativeLayout>

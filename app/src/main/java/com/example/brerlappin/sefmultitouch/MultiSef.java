@@ -35,6 +35,7 @@ import java.util.UUID;
 public class MultiSef extends Activity implements View.OnTouchListener,
         MenuFragment.OnMenuOptionListener, BlueFragment.OnBlueOptionListener,
         MyBluetooth.OnDiscoveryListener{
+
     final static int NONE = 0;
     final static int DRAG = 1;
     final static int ZOOM = 2;
@@ -90,6 +91,9 @@ public class MultiSef extends Activity implements View.OnTouchListener,
                 Log.v("Fragment Manager", "Current Back Stack Count: "+fragmentManager.getBackStackEntryCount());
                 if(fragmentManager.getBackStackEntryCount() <= 0){
                     waitingResult = false;
+                } else if(fragmentManager.getBackStackEntryCount() == 2) {
+                    //Probably back from devices discovery screen
+                    soBlue.stopBlueDiscovery();
                 }
             }
         });
@@ -213,28 +217,30 @@ public class MultiSef extends Activity implements View.OnTouchListener,
             return false;
         }
 
-        if(event.getPressure() >= 0.40f && System.currentTimeMillis()-optionsTimer > 1000){
-            if (!waitingResult) {
-                enableOptionsMenu();
-                waitingResult = true;
-            } else {
-                disableFragment(menuFragment);
-                //waitingResult = false;
-            }
-            optionsTimer = System.currentTimeMillis();
-            return false;
-        }
+//        if(event.getPressure() >= 0.40f && System.currentTimeMillis()-optionsTimer > 1000){
+//            if (!waitingResult) {
+//                enableOptionsMenu();
+//                waitingResult = true;
+//            } else {
+//                disableFragment(menuFragment);
+//                //waitingResult = false;
+//            }
+//            optionsTimer = System.currentTimeMillis();
+//            return false;
+//        }
 
         if(waitingResult)
             return true;
 
         Log.v("Touch Event", "Action: "+event.getAction());
+
         switch(event.getAction() & MotionEvent.ACTION_MASK){
             case MotionEvent.ACTION_DOWN:
                 touchState = DRAG;
                 centerX = event.getX();
                 centerY = event.getY();
                 eventMatrix.set(matrix);
+                optionsTimer = System.currentTimeMillis();
                 break;
             case MotionEvent.ACTION_POINTER_DOWN:
                 eventDistance = calcDistance(event);
@@ -249,6 +255,7 @@ public class MultiSef extends Activity implements View.OnTouchListener,
 //                float tmpX, tmpY;
                 if(touchState == DRAG){
                     if(centerX!=event.getX() || centerY!=event.getY()){
+                        optionsTimer = System.currentTimeMillis();
                         matrix.set(eventMatrix);
                         matrix.postTranslate(event.getX(0)-centerX, event.getY(0)-centerY);
 
@@ -267,6 +274,18 @@ public class MultiSef extends Activity implements View.OnTouchListener,
 //                            tmpY = 600f-tempValues[5];
 //
 //                        matrix.postTranslate(tmpX, tmpY);
+                    }else{
+                        if(System.currentTimeMillis()-optionsTimer > 1000){
+                            if (!waitingResult) {
+                                enableOptionsMenu();
+                                waitingResult = true;
+                            } else {
+                                disableFragment(menuFragment);
+                                //waitingResult = false;
+                            }
+                            optionsTimer = System.currentTimeMillis();
+                            return false;
+                        }
                     }
                 }
                 else if(touchState == ZOOM){
@@ -410,6 +429,9 @@ public class MultiSef extends Activity implements View.OnTouchListener,
 //                enableBlueNotification();
                 soBlue.clientConnection();
                 break;
+            case 5:
+                disableFragment(blueFragment);
+                break;
             default:
                 Log.e("BlueFragmentListener", "ERROR: Button ID not recognized");
         }
@@ -433,6 +455,8 @@ public class MultiSef extends Activity implements View.OnTouchListener,
             }else{
                 Toast.makeText(MultiSef.this, "This version does not support Bluetooth", Toast.LENGTH_LONG).show();
             }
+        } else if(buttonID == 3) {
+            disableFragment(menuFragment);
         }
     }
 

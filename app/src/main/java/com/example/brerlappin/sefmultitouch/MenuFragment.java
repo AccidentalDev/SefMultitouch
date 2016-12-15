@@ -16,7 +16,7 @@ import android.widget.Toast;
 
 public class MenuFragment extends Fragment {
     //LinearLayout optionsLayout;
-    Button localButton, blueButton;
+    Button localButton, blueButton, closeButton;
     OnMenuOptionListener activityCallback;
 
     public interface OnMenuOptionListener{
@@ -50,6 +50,7 @@ public class MenuFragment extends Fragment {
         //optionsLayout = (LinearLayout) getActivity().findViewById(R.id.options_layout);
         localButton = (Button) getActivity().findViewById(R.id.local_button);
         blueButton = (Button) getActivity().findViewById(R.id.blue_button);
+        closeButton = (Button) getActivity().findViewById(R.id.close_button);
 
         localButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -61,6 +62,12 @@ public class MenuFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 activityCallback.onMenuButtonPressed(2);
+            }
+        });
+        closeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                activityCallback.onMenuButtonPressed(3);
             }
         });
     }

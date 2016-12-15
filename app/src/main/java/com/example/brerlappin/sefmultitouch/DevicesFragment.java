@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 /**
@@ -24,6 +25,14 @@ public class DevicesFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         blueDevicesTextList = (TextView) getActivity().findViewById(R.id.blue_devices);
         blueDevicesStatus = (TextView) getActivity().findViewById(R.id.statusView);
+
+        Button closeButton = (Button) getActivity().findViewById(R.id.close_button_disc);
+        closeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getActivity().getFragmentManager().popBackStack();
+            }
+        });
     }
 
     public void setStatusText(String txt){

@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  * Created by BRERLAPPIN on 09/12/2016.
@@ -17,6 +18,7 @@ import android.widget.TextView;
 public class SelectionFragment extends Fragment {
     public Button continueButton;
     public RadioGroup devicesList;
+    public boolean madeSelection = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
@@ -34,6 +36,7 @@ public class SelectionFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 //Retun the current Radio Button ID
+                madeSelection = true;
             }
         });
     }
@@ -42,5 +45,12 @@ public class SelectionFragment extends Fragment {
         RadioButton tmpButton = new RadioButton(getActivity().getApplicationContext());
         tmpButton.setText(deviceName);
         devicesList.addView(tmpButton);
+    }
+
+    @Override
+    public void onDestroy(){
+        if(!madeSelection){
+            Toast.makeText(getActivity().getApplicationContext(), "Pairing canceled!", Toast.LENGTH_LONG).show();
+        }
     }
 }
